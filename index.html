@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Abfallkalender</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #fff; }
+    body { display: flex; align-items: center; justify-content: center; }
+    /* Window onto the calendar section of the embedded page */
+    #frame {
+      width: 1170px;
+      height: 400px;
+      overflow: hidden;
+      position: relative;
+      transform-origin: center;
+      flex-shrink: 0;
+    }
+    #frame iframe {
+      position: absolute;
+      top: -248px;   /* skip navbar, title and location selector */
+      left: -15px;
+      width: 1200px; /* width at which both months render side by side */
+      height: 700px;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="frame">
+    <iframe src="https://www.abfalltermine-bamberg.de/" scrolling="no" title="Abfalltermine Bamberg"></iframe>
+  </div>
+  <script>
+    // Scale the calendar down to fit narrow viewports
+    const frame = document.getElementById('frame');
+    function fit() {
+      const s = Math.min(1, (innerWidth - 32) / 1170);
+      frame.style.transform = `scale(${s})`;
+    }
+    addEventListener('resize', fit);
+    fit();
+  </script>
+</body>
+</html>
