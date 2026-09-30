@@ -9,8 +9,8 @@
     body { display: flex; align-items: center; justify-content: center; }
     /* Window onto the calendar section of the embedded page */
     #frame {
-      width: 1170px;
-      height: 400px;
+      width: 555px;
+      height: 398px; /* 5-week month; adjusted in script */
       overflow: hidden;
       position: relative;
       transform-origin: center;
@@ -19,9 +19,9 @@
     #frame iframe {
       position: absolute;
       top: -248px;   /* skip navbar, title and location selector */
-      left: -15px;
-      width: 1200px; /* width at which both months render side by side */
-      height: 700px;
+      left: -30px;
+      width: 1200px; /* months side by side; current month is the left one */
+      height: 900px;
       border: 0;
     }
   </style>
@@ -31,10 +31,18 @@
     <iframe src="https://www.abfalltermine-bamberg.de/" scrolling="no" title="Abfalltermine Bamberg"></iframe>
   </div>
   <script>
-    // Scale the calendar down to fit narrow viewports
     const frame = document.getElementById('frame');
+
+    // Fit the window to the number of week rows in the current month
+    const now = new Date();
+    const offset = (new Date(now.getFullYear(), now.getMonth(), 1).getDay() + 6) % 7; // Monday-first
+    const days = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+    const weeks = Math.ceil((offset + days) / 7);
+    frame.style.height = `${398 + (weeks - 5) * 66}px`;
+
+    // Scale the calendar down to fit narrow viewports
     function fit() {
-      const s = Math.min(1, (innerWidth - 32) / 1170);
+      const s = Math.min(1, (innerWidth - 32) / 555);
       frame.style.transform = `scale(${s})`;
     }
     addEventListener('resize', fit);
